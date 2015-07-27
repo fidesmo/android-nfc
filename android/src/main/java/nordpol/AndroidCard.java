@@ -23,16 +23,21 @@ public class AndroidCard implements IsoCard {
         this.card = card;
     }
 
+    /**
+     * Model names&numbers: 
+     * https://support.google.com/googleplay/android-developer/answer/6154891?hl=en 
+     */
+    private static boolean isSamsungS5() {
+    	return (Build.MANUFACTURER.equals("Samsung") 
+                		&& (((Build.DEVICE.startsWith("k") || Build.DEVICE.startsWith("l")) && (Build.MODEL.contains("SM-G")))
+                				|| (Build.DEVICE.contains("SCL23"))));
+    }
+
     public static AndroidCard get(Tag tag) throws IOException {
         IsoDep card = IsoDep.get(tag);
 
         if(card != null) {
-            /* Model names&numbers: 
-             * https://support.google.com/googleplay/android-developer/answer/6154891?hl=en 
-             */ 
-            if (Build.MANUFACTURER.equals("Samsung") 
-            		&& (((Build.DEVICE.startsWith("k") || Build.DEVICE.startsWith("l")) && (Build.MODEL.contains("SM-G")))
-            				|| (Build.DEVICE.contains("SCL23")))) {
+            if (isSamsungS5()) {
             	/* Workaround for the Samsung Galaxy S5 (since the
             	 * first connection always hangs on transceive).
             	 */
@@ -74,10 +79,10 @@ public class AndroidCard implements IsoCard {
     }
 
     public int getMaxTransceiveLength() throws IOException {
-        /* TODO: This could be improved if we could identify
-         * Samsung Galaxy S5 mini devices
-         */
-        return Math.min(card.getMaxTransceiveLength(), SAMSUNG_S5_MINI_MAX);
+        if (isSamsungS5()) {
+        	return Math.min(card.getMaxTransceiveLength(), SAMSUNG_S5_MINI_MAX);	
+        }
+        return card.getMaxTransceiveLength();
     }
 
     public int getTimeout() {
