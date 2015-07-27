@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
+import android.os.Build;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 
@@ -26,13 +27,18 @@ public class AndroidCard implements IsoCard {
         IsoDep card = IsoDep.get(tag);
 
         if(card != null) {
-            /* Workaround for the Samsung Galaxy S5 (since the
-             * first connection always hangs on transceive).
-             * TODO: This could be improved if we could identify
-             * Samsung Galaxy S5 devices
-             */
-            card.connect();
-            card.close();
+            /* Model names&numbers: 
+             * https://support.google.com/googleplay/android-developer/answer/6154891?hl=en 
+             */ 
+            if (Build.MANUFACTURER.equals("Samsung") 
+            		&& (((Build.DEVICE.startsWith("k") || Build.DEVICE.startsWith("l")) && (Build.MODEL.contains("SM-G")))
+            				|| (Build.DEVICE.contains("SCL23")))) {
+            	/* Workaround for the Samsung Galaxy S5 (since the
+            	 * first connection always hangs on transceive).
+            	 */
+            	card.connect();
+            	card.close();
+            }
             return new AndroidCard(card);
         } else {
             return null;
