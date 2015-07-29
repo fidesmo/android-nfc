@@ -56,18 +56,22 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public void addOnCardErrorListener(OnCardErrorListener listener) {
         errorListeners.add(listener);
     }
 
+    @Override
     public void removeOnCardErrorListener(OnCardErrorListener listener) {
         errorListeners.remove(listener);
     }
 
+    @Override
     public boolean isConnected() {
         return card.isConnected();
     }
 
+    @Override
     public void connect() throws IOException {
         try {
             card.connect();
@@ -78,6 +82,7 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public int getMaxTransceiveLength() throws IOException {
         if (isSamsungS5()) {
         	return Math.min(card.getMaxTransceiveLength(), SAMSUNG_S5_MINI_MAX);	
@@ -85,14 +90,17 @@ public class AndroidCard implements IsoCard {
         return card.getMaxTransceiveLength();
     }
 
+    @Override
     public int getTimeout() {
         return card.getTimeout();
     }
 
+    @Override
     public void setTimeout(int timeout) {
         card.setTimeout(timeout);
     }
 
+    @Override
     public void close() throws IOException {
         try {
             card.close();
@@ -102,6 +110,7 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public byte[] transceive(byte [] command) throws IOException {
         try {
             return card.transceive(command);
@@ -111,6 +120,7 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public List<byte[]> transceive(List<byte[]> commands) throws IOException {
         try {
             ArrayList<byte[]> responses = new ArrayList<byte[]>();
