@@ -127,4 +127,9 @@ public class AndroidCard implements IsoCard {
     public Tag getTag() {
         return card.getTag();
     }
+    
+    public byte[] getHistoricalBytes() {
+        return card.getHistoricalBytes();
+    }
+
 }
