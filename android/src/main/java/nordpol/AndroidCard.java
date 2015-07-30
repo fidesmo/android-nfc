@@ -141,5 +141,4 @@ public class AndroidCard implements IsoCard {
     public byte[] getHistoricalBytes() {
         return card.getHistoricalBytes();
     }
-
 }
