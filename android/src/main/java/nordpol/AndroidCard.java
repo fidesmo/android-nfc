@@ -28,7 +28,7 @@ public class AndroidCard implements IsoCard {
      * https://support.google.com/googleplay/android-developer/answer/6154891?hl=en 
      */
     private static boolean isSamsungS5() {
-    	return (Build.MANUFACTURER.equals("Samsung") 
+    	return (Build.MANUFACTURER.equalsIgnoreCase("samsung") 
                 		&& (((Build.DEVICE.startsWith("k") || Build.DEVICE.startsWith("l")) && (Build.MODEL.contains("SM-G")))
                 				|| (Build.DEVICE.contains("SCL23"))));
     }
