@@ -14,4 +14,5 @@ public interface IsoCard {
     public void setTimeout(int timeout);
     public byte[] transceive(byte[] data) throws IOException;
     public List<byte[]> transceive(List<byte[]> data) throws IOException;
+    public byte[] getHistoricalBytes() throws IOException;
 }
