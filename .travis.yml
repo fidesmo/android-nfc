@@ -1,6 +1,7 @@
 language: android
 android:
   components:
+    - tools
     # The BuildTools version used by your project
     - build-tools-25.0.1
 
