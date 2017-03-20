@@ -50,7 +50,7 @@ import nordpol.android.R;
  * nfcGuideView.setCurrentStatus(NfcGuideView.NfcGuideViewStatus.TRANSFERRING);
  */
 public class NfcGuideView extends RelativeLayout {
-    private static final double TRANSACTION_ITEM_ICON_X_OFFSET = 1.20;
+    private static final float TRANSACTION_ITEM_ICON_X_OFFSET_DP = 25.0f;
     private int guideItemsStartDistance = 50;
     private static final int ANIMATION_DURATION_SHORT = 100;
     private static final int ANIMATION_DURATION_MEDIUM = 200;
@@ -215,7 +215,7 @@ public class NfcGuideView extends RelativeLayout {
     }
 
     private int getTransactionItemIconXStart() {
-        return (int) (getPhoneXStart() * TRANSACTION_ITEM_ICON_X_OFFSET);
+        return (int) (getPhoneXStart() + getPixelsFromDp(TRANSACTION_ITEM_ICON_X_OFFSET_DP));
     }
 
     private int getViewCenter(){
@@ -233,7 +233,7 @@ public class NfcGuideView extends RelativeLayout {
     }
 
     private int getTransactionItemIconXTransferring() {
-        return (int) (getPhoneXTransferring() * TRANSACTION_ITEM_ICON_X_OFFSET);
+        return (int) (getPhoneXTransferring() + getPixelsFromDp(TRANSACTION_ITEM_ICON_X_OFFSET_DP));
     }
 
     private void nfcGuideTransferring() {
@@ -368,5 +368,10 @@ public class NfcGuideView extends RelativeLayout {
         } else {
             return getResources().getDrawable(resourceId);
         }
+    }
+
+    private int getPixelsFromDp(float dp) {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 }
