@@ -126,3 +126,10 @@ commit. Don't forget to add yourself to the list of contributors below.
 Thanks for your contributions:
 
 - [adriaan-telcred](https://github.com/adriaan-telcred)
+
+## Used by
+
+![Fidesmo logo](/fidesmo-logo.webp?raw=true)
+[Fidesmo](https://play.google.com/store/apps/details?id=com.fidesmo.sec.android)
+![Ledger Wallet logo](/ledger-wallet-logo.webp?raw=true)
+[Ledger Wallet](https://github.com/LedgerHQ/ledger-wallet-android)
