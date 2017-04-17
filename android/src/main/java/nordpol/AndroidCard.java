@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
+import android.os.Build;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 
@@ -22,17 +23,27 @@ public class AndroidCard implements IsoCard {
         this.card = card;
     }
 
+    /**
+     * Model names&numbers: 
+     * https://support.google.com/googleplay/android-developer/answer/6154891?hl=en 
+     */
+    private static boolean isSamsungS5() {
+    	return (Build.MANUFACTURER.equalsIgnoreCase("samsung") 
+                		&& (((Build.DEVICE.startsWith("k") || Build.DEVICE.startsWith("l")) && (Build.MODEL.contains("SM-G")))
+                				|| (Build.DEVICE.contains("SCL23"))));
+    }
+
     public static AndroidCard get(Tag tag) throws IOException {
         IsoDep card = IsoDep.get(tag);
 
         if(card != null) {
-            /* Workaround for the Samsung Galaxy S5 (since the
-             * first connection always hangs on transceive).
-             * TODO: This could be improved if we could identify
-             * Samsung Galaxy S5 devices
-             */
-            card.connect();
-            card.close();
+            if (isSamsungS5()) {
+            	/* Workaround for the Samsung Galaxy S5 (since the
+            	 * first connection always hangs on transceive).
+            	 */
+            	card.connect();
+            	card.close();
+            }
             return new AndroidCard(card);
         } else {
             return null;
@@ -45,18 +56,22 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public void addOnCardErrorListener(OnCardErrorListener listener) {
         errorListeners.add(listener);
     }
 
+    @Override
     public void removeOnCardErrorListener(OnCardErrorListener listener) {
         errorListeners.remove(listener);
     }
 
+    @Override
     public boolean isConnected() {
         return card.isConnected();
     }
 
+    @Override
     public void connect() throws IOException {
         try {
             card.connect();
@@ -67,21 +82,25 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public int getMaxTransceiveLength() throws IOException {
-        /* TODO: This could be improved if we could identify
-         * Samsung Galaxy S5 mini devices
-         */
-        return Math.min(card.getMaxTransceiveLength(), SAMSUNG_S5_MINI_MAX);
+        if (isSamsungS5()) {
+        	return Math.min(card.getMaxTransceiveLength(), SAMSUNG_S5_MINI_MAX);	
+        }
+        return card.getMaxTransceiveLength();
     }
 
+    @Override
     public int getTimeout() {
         return card.getTimeout();
     }
 
+    @Override
     public void setTimeout(int timeout) {
         card.setTimeout(timeout);
     }
 
+    @Override
     public void close() throws IOException {
         try {
             card.close();
@@ -91,6 +110,7 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public byte[] transceive(byte [] command) throws IOException {
         try {
             return card.transceive(command);
@@ -100,6 +120,7 @@ public class AndroidCard implements IsoCard {
         }
     }
 
+    @Override
     public List<byte[]> transceive(List<byte[]> commands) throws IOException {
         try {
             ArrayList<byte[]> responses = new ArrayList<byte[]>();
@@ -115,5 +136,9 @@ public class AndroidCard implements IsoCard {
 
     public Tag getTag() {
         return card.getTag();
+    }
+    
+    public byte[] getHistoricalBytes() {
+        return card.getHistoricalBytes();
     }
 }
